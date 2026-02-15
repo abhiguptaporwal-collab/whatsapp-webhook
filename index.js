@@ -9,15 +9,13 @@ const PORT = process.env.PORT || 10000;
 // 🔐 Apna Gupshup API Key
 const API_KEY = "zjsyuafmiumjxibdxplvtiwljkomijss";
 
-// 📲 Apna Gupshup WhatsApp Number (with 91)
+// 📲 Apna Gupshup WhatsApp Number (exact jo dashboard me hai)
 const SOURCE_NUMBER = "919243166429";
 
-// Health check
 app.get("/", (req, res) => {
-  res.status(200).send("Server running");
+  res.send("Server running");
 });
 
-// Webhook route
 app.post("/webhook", async (req, res) => {
   try {
     const body = req.body;
@@ -38,20 +36,26 @@ app.post("/webhook", async (req, res) => {
 
       if (userMessage.toLowerCase() === "hi") {
         await axios({
-          method: "POST",
-          url: "https://api.gupshup.io/wa/api/v1/template/msg",
+          method: "post",
+          url: "https://api.gupshup.io/sm/api/v1/msg",
           headers: {
-            "Content-Type": "application/json",
-            apikey: API_KEY
+            apikey: API_KEY,
+            "Content-Type": "application/x-www-form-urlencoded"
           },
-          data: {
+          data: new URLSearchParams({
+            channel: "whatsapp",
             source: SOURCE_NUMBER,
             destination: userNumber,
-            template: {
-              name: "guptatechhub_main",
-              language: "en"
-            }
-          }
+            message: JSON.stringify({
+              type: "template",
+              template: {
+                name: "guptatechhub_main",
+                language: {
+                  code: "en"
+                }
+              }
+            })
+          }).toString()
         });
 
         console.log("Template Sent Successfully");
@@ -60,7 +64,7 @@ app.post("/webhook", async (req, res) => {
 
     res.sendStatus(200);
   } catch (error) {
-    console.log("ERROR DETAILS:", error.response?.data || error.message);
+    console.log("ERROR:", error.response?.data || error.message);
     res.sendStatus(500);
   }
 });

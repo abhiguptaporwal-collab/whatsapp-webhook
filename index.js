@@ -6,11 +6,11 @@ app.use(express.json());
 
 const PORT = process.env.PORT || 10000;
 
-// App Level API Key
+// App level API key
 const API_KEY = "sk_42bfca95e8204b75a686d3f17b7daf59";
 
-// IMPORTANT: Phone Number ID (not mobile number)
-const PHONE_NUMBER_ID = "941331062402495";
+// Display phone number (dashboard me jo dikhta hai)
+const SOURCE_NUMBER = "919243166429";
 
 app.get("/", (req, res) => {
   res.send("Server running");
@@ -23,7 +23,7 @@ app.post("/webhook", async (req, res) => {
     if (
       body.entry &&
       body.entry[0].changes &&
-      body.entry[0].changes[0].value.messages
+      body.entry[0].value?.messages
     ) {
       const msg = body.entry[0].changes[0].value.messages[0];
       const userMessage = msg.text?.body || "";
@@ -35,20 +35,23 @@ app.post("/webhook", async (req, res) => {
       if (userMessage.trim().toLowerCase() === "hi") {
 
         await axios.post(
-          `https://api.gupshup.io/wa/api/v1/messages/${PHONE_NUMBER_ID}`,
+          "https://api.gupshup.io/sm/api/v1/msg",
           {
-            messaging_product: "whatsapp",
-            to: userNumber,
-            type: "template",
-            template: {
-              name: "guptatechhub_main",
-              language: { code: "en" }
+            channel: "whatsapp",
+            source: SOURCE_NUMBER,
+            destination: userNumber,
+            message: {
+              type: "template",
+              template: {
+                name: "guptatechhub_main",
+                language: { code: "en" }
+              }
             }
           },
           {
             headers: {
-              Authorization: `Bearer ${API_KEY}`,
-              "Content-Type": "application/json"
+              "Content-Type": "application/json",
+              apikey: API_KEY
             }
           }
         );

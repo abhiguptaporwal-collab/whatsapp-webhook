@@ -10,7 +10,7 @@ const PORT = process.env.PORT || 10000;
 const API_KEY = "zjsyuafmiumjxibdxplvtiwljkomijss";
 
 // 📲 Tumhara Gupshup WhatsApp number
-const SOURCE_NUMBER = "9243166429";
+const SOURCE_NUMBER = "919243166429";
 
 // Health check
 app.get("/", (req, res) => {

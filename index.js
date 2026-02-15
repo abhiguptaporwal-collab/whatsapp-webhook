@@ -44,7 +44,7 @@ app.post("/webhook", async (req, res) => {
           channel: "whatsapp",
           source: SOURCE_NUMBER,
           destination: userNumber,
-          "src.name": "guptatechhub_main_menu",
+          "src.name": "nayasetuguptatech",
           message: JSON.stringify({
             type: "text",
             text: "Hello 👋 Welcome to NayaSetu Gupta Tech!"

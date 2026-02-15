@@ -38,7 +38,7 @@ app.post("/webhook", async (req, res) => {
 
       if (userMessage.toLowerCase() === "hi") {
         await axios.post(
-          "https://api.gupshup.io/sm/api/v1/msg",
+          "https://api.gupshup.io/wa/api/v1/msg",
           {
             channel: "whatsapp",
             source: SOURCE_NUMBER,

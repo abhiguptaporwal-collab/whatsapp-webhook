@@ -38,28 +38,24 @@ app.post("/webhook", async (req, res) => {
 
       if (userMessage.toLowerCase() === "hi") {
         await axios.post(
-          "https://api.gupshup.io/wa/api/v1/msg",
-          {
-            channel: "whatsapp",
-            source: SOURCE_NUMBER,
-            destination: userNumber,
-            message: {
-              type: "template",
-              template: {
-                name: "guptatechhub_main",
-                language: { code: "en" }
-              }
-            }
-          },
-          {
-            headers: {
-              apikey: API_KEY,
-              "Content-Type": "application/json"
-            }
-          }
-        );
+  "https://api.gupshup.io/wa/api/v1/template/msg",
+  {
+    source: SOURCE_NUMBER,
+    destination: userNumber,
+    template: {
+      name: "guptatechhub_main",
+      language: "en"
+    }
+  },
+  {
+    headers: {
+      apikey: API_KEY,
+      "Content-Type": "application/json"
+    }
+  }
+);
 
-        console.log("Template Sent Successfully");
+console.log("Template Sent Successfully");
       }
     }
 

@@ -6,18 +6,17 @@ app.use(express.json());
 
 const PORT = process.env.PORT || 10000;
 
-// 🔐 Yaha apni NEW App API Key paste karo
+// 🔐 New App API Key (Settings → Create API key)
 const API_KEY = "sk_42bfca95e8204b75a686d3f17b7daf59";
 
-// 📲 Dashboard me jo display_phone_number hai wahi daalo
-const SOURCE_NUMBER = "919243166429";
+// 📲 Phone Number ID (IMPORTANT)
+const PHONE_NUMBER_ID = "941331062402495"; 
+// Ye tumhare logs me aa raha tha
 
-// Health check
 app.get("/", (req, res) => {
-  res.status(200).send("Server running");
+  res.send("Server running");
 });
 
-// Webhook
 app.post("/webhook", async (req, res) => {
   try {
     const body = req.body;
@@ -27,25 +26,27 @@ app.post("/webhook", async (req, res) => {
       body.entry[0].changes &&
       body.entry[0].changes[0].value.messages
     ) {
-      const messageData = body.entry[0].changes[0].value.messages[0];
 
-      const userMessage = messageData.text?.body || "";
-      const userNumber = messageData.from;
+      const msg = body.entry[0].changes[0].value.messages[0];
+      const userMessage = msg.text?.body || "";
+      const userNumber = msg.from;
 
       console.log("User Message:", userMessage);
       console.log("User Number:", userNumber);
 
-      // Agar user "hi" bheje
       if (userMessage.trim().toLowerCase() === "hi") {
 
         await axios.post(
-          "https://api.gupshup.io/wa/api/v1/template/msg",
+          `https://api.gupshup.io/wa/api/v1/messages/${PHONE_NUMBER_ID}`,
           {
-            source: SOURCE_NUMBER,
-            destination: userNumber,
+            messaging_product: "whatsapp",
+            to: userNumber,
+            type: "template",
             template: {
               name: "guptatechhub_main",
-              language: "en"
+              language: {
+                code: "en"
+              }
             }
           },
           {

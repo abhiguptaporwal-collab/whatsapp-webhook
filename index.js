@@ -6,10 +6,10 @@ app.use(express.json());
 
 const PORT = process.env.PORT || 10000;
 
-// 🔐 NEW API KEY (Settings → Create API key)
+// ⚠️ NEW API KEY (Settings → Create API key)
 const API_KEY = "sk_42bfca95e8204b75a686d3f17b7daf59";
 
-// 📲 Dashboard me jo display_phone_number hai
+// ⚠️ SOURCE NUMBER = display_phone_number (with country code, no +)
 const SOURCE_NUMBER = "919243166429";
 
 app.get("/", (req, res) => {
@@ -35,7 +35,7 @@ app.post("/webhook", async (req, res) => {
       if (userMessage.trim().toLowerCase() === "hi") {
 
         await axios.post(
-          "https://api.gupshup.io/wa/api/v1/msg",
+          "https://api.gupshup.io/sm/api/v1/msg",
           {
             channel: "whatsapp",
             source: SOURCE_NUMBER,
@@ -44,16 +44,14 @@ app.post("/webhook", async (req, res) => {
               type: "template",
               template: {
                 name: "guptatechhub_main",
-                language: {
-                  code: "en"
-                }
+                language: { code: "en" }
               }
             }
           },
           {
             headers: {
-              "Content-Type": "application/json",
-              apikey: API_KEY
+              apikey: API_KEY,
+              "Content-Type": "application/json"
             }
           }
         );

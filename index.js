@@ -6,10 +6,10 @@ app.use(express.json());
 
 const PORT = process.env.PORT || 10000;
 
-// 🔐 Apna Gupshup API Key yaha daalo
+// 🔐 Apna Gupshup API Key
 const API_KEY = "zjsyuafmiumjxibdxplvtiwljkomijss";
 
-// 📲 Tumhara Gupshup WhatsApp number
+// 📲 Apna Gupshup WhatsApp Number (with 91)
 const SOURCE_NUMBER = "919243166429";
 
 // Health check
@@ -21,7 +21,7 @@ app.get("/", (req, res) => {
 app.post("/webhook", async (req, res) => {
   try {
     const body = req.body;
-    console.log("Incoming Data:", JSON.stringify(body, null, 2));
+    console.log("Incoming:", JSON.stringify(body, null, 2));
 
     if (
       body.entry &&
@@ -37,31 +37,30 @@ app.post("/webhook", async (req, res) => {
       console.log("User Number:", userNumber);
 
       if (userMessage.toLowerCase() === "hi") {
-        await axios.post(
-  "https://api.gupshup.io/wa/api/v1/template/msg",
-  {
-    source: SOURCE_NUMBER,
-    destination: userNumber,
-    template: {
-      name: "guptatechhub_main",
-      language: "en"
-    }
-  },
-  {
-    headers: {
-      apikey: API_KEY,
-      "Content-Type": "application/json"
-    }
-  }
-);
+        await axios({
+          method: "POST",
+          url: "https://api.gupshup.io/wa/api/v1/template/msg",
+          headers: {
+            "Content-Type": "application/json",
+            apikey: API_KEY
+          },
+          data: {
+            source: SOURCE_NUMBER,
+            destination: userNumber,
+            template: {
+              name: "guptatechhub_main",
+              language: "en"
+            }
+          }
+        });
 
-console.log("Template Sent Successfully");
+        console.log("Template Sent Successfully");
       }
     }
 
     res.sendStatus(200);
   } catch (error) {
-    console.error("Error:", error.response?.data || error.message);
+    console.log("ERROR DETAILS:", error.response?.data || error.message);
     res.sendStatus(500);
   }
 });

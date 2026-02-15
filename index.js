@@ -7,7 +7,7 @@ app.use(express.urlencoded({ extended: true }));
 
 const PORT = process.env.PORT || 10000;
 
-const API_KEY = "sk_42bfca95e8204b75a686d3f17b7daf59";
+const API_KEY = "sk_915efd858d164be19e4da7a97666b070";
 const SOURCE_NUMBER = "919243166429"; // display_phone_number
 
 app.get("/", (req, res) => {
